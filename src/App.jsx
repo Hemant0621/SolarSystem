@@ -14,10 +14,10 @@ const SolarSystem = () => {
   return (
     <Canvas camera={{ position: [0, 20, 50], fov: 75 }} style={{ height: "100vh", width: "100vw" }}>
       <ambientLight />
-      <pointLight position={[10, 10, 10]} />
+      <pointLight position={[25, 25, 25]} intensity={1} />
       <Sun />
       <OrbitPath radius={orbitRadius} />
-      <Earth orbitRadius={orbitRadius} />
+      <Earth orbitRadius={orbitRadius} scale={2} />
       <OrbitControls enableZoom={true} />
     </Canvas>
   );
