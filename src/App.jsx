@@ -1,7 +1,32 @@
-import React, { useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import React, { useState, useRef, useEffect } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import Planet from './components/Planet';
+
+// Custom component to handle the camera and controls logic
+const CameraControls = () => {
+  const { camera, gl } = useThree();
+  const controlsRef = useRef();
+
+  useEffect(() => {
+    // Set initial camera position and target to focus on the Sun
+    camera.position.set(0, 100, 500);
+    controlsRef.current.target.set(0, 0, 0);
+  }, [camera]);
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      args={[camera, gl.domElement]}
+      enablePan={true}          // Enable panning
+      enableZoom={true}         // Allow zoom
+      minDistance={0}          // Minimum zoom-in distance
+      maxDistance={1000000}       // Maximum zoom-out distance
+      maxPolarAngle={Math.PI}   // Allow full rotation vertically
+    />
+
+  );
+};
 
 // Main SolarSystem component
 const SolarSystem = () => {
@@ -13,16 +38,13 @@ const SolarSystem = () => {
 
   return (
     <>
-      <Canvas 
-        camera={{ position: [0, 100, 500], fov: 75, far: 10000 }} 
-        style={{ height: "100vh", width: "100vw" }}
-      >
-        <ambientLight />
-        <pointLight position={[25, 25, 25]} intensity={1} />
-        
+      <Canvas camera={{ position: [0, 100, 500], fov: 90,near : 1, far: 1000000 }} style={{ height: "100vh", width: "100vw" }}>
+        <ambientLight intensity={1} />
+        <pointLight position={[25, 25, 25]} intensity={2} />
+
         <Planet
           orbitRadius={0}
-          scale={10}
+          scale={100}
           modelPath="/models/Sun.gltf"
           texturePath="/textures/Sun.png"
           name="Sun"
@@ -30,8 +52,8 @@ const SolarSystem = () => {
           isTimeStopped={isTimeStopped} // Pass the state to Planet
         />
         <Planet
-          orbitRadius={83.14}
-          scale={0.003504}
+          orbitRadius={831.4}
+          scale={0.03504}
           modelPath="/models/Mercury.gltf"
           texturePath="/textures/Mercury.jpg"
           name="Mercury"
@@ -39,8 +61,8 @@ const SolarSystem = () => {
           isTimeStopped={isTimeStopped}
         />
         <Planet
-          orbitRadius={155.06}
-          scale={0.08691}
+          orbitRadius={1550.6}
+          scale={0.8691}
           modelPath="/models/Venus.gltf"
           texturePath="/textures/Venus.jpg"
           name="Venus"
@@ -48,8 +70,8 @@ const SolarSystem = () => {
           isTimeStopped={isTimeStopped}
         />
         <Planet
-          orbitRadius={214.46}
-          scale={0.09149}
+          orbitRadius={2144.6}
+          scale={0.9149}
           modelPath="/models/Earth.gltf"
           texturePath="/textures/Earth.jpg"
           name="Earth"
@@ -57,8 +79,8 @@ const SolarSystem = () => {
           isTimeStopped={isTimeStopped}
         />
         <Planet
-          orbitRadius={327.35}
-          scale={0.04868}
+          orbitRadius={3273.5}
+          scale={0.4868}
           modelPath="/models/Mars.gltf"
           texturePath="/textures/Mars.jpg"
           name="Mars"
@@ -66,22 +88,21 @@ const SolarSystem = () => {
           isTimeStopped={isTimeStopped}
         />
         <Planet
-          orbitRadius={1116.07}
-          scale={1.00398}
+          orbitRadius={11160.7}
+          scale={10.0398}
           modelPath="/models/Jupiter.gltf"
           texturePath="/textures/Jupiter.jpg"
           name="Jupiter"
           rotationSpeed={0.005}
           isTimeStopped={isTimeStopped}
         />
-        <OrbitControls 
-          maxPolarAngle={Math.PI / 2} 
-          minDistance={50}             
-          maxDistance={3000}           
-        />
+
+        {/* Camera and controls component */}
+        <CameraControls />
       </Canvas>
-      <button 
-        onClick={toggleTime} 
+
+      <button
+        onClick={toggleTime}
         style={{
           position: 'absolute',
           top: '20px',
@@ -91,7 +112,6 @@ const SolarSystem = () => {
           cursor: 'pointer',
           zIndex: 1000,
         }}
-        className='cursor-pointer'
       >
         {isTimeStopped ? 'Start Time' : 'Stop Time'}
       </button>
