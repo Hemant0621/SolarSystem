@@ -65,6 +65,7 @@ const SolarSystem = () => {
           rotationSpeed={0.015}
           isTimeStopped={isTimeStopped}
           focusplanet={focusPlanet}
+          focus={true}
         />
         <Planet
           orbitRadius={1550.6}
@@ -125,6 +126,9 @@ const SolarSystem = () => {
       >
         {isTimeStopped ? 'Start Time' : 'Stop Time'}
       </button>
+      <div>
+        <button>mercury</button>
+      </div>
     </>
   );
 };
