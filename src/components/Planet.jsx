@@ -15,7 +15,6 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
     const planetTexture = useLoader(THREE.TextureLoader, texturePath);
     
     useEffect(() => {
-        console.log(focus)
         if (gltf && gltf.scene) {
             const planetMesh = gltf.scene.children[0];
 
@@ -45,6 +44,7 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
     });
 
     useEffect(()=>{
+        console.log(focus)
         if(focus==name){
             focusplanet(planetRef.current.position)
             console.log(name)
