@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 import { Html } from '@react-three/drei';
 
-const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpeed,isTimeStopped , controlsRef , focus=false}) => {
+const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpeed, isTimeStopped, focusplanet }) => {
     const planetRef = useRef();
     const [angle, setAngle] = useState(0);
     const [hovered, setHovered] = useState(false);
@@ -13,17 +13,6 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
 
     // Load the planet texture
     const planetTexture = useLoader(THREE.TextureLoader, texturePath);
-
-    useFrame(() => {
-        if (controlsRef.current && focus) {
-            const mercuryPosition = new THREE.Vector3(
-                orbitRadius * Math.cos(0), // X
-                0, // Y
-                orbitRadius * Math.sin(0) // Z
-            );
-            controlsRef.current.target.copy(mercuryPosition);
-        }
-    });
 
     useEffect(() => {
         if (gltf && gltf.scene) {
@@ -54,11 +43,6 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
         }
     });
 
-    // Handle hover and click events
-    const handleClick = () => {
-        alert(`${name} clicked!`);
-    };
-
     const points = [];
     const segments = 100; // Number of segments for a smooth circle
 
@@ -80,9 +64,12 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
                     object={planetRef.current}
                     onPointerOver={() => setHovered(true)}
                     onPointerOut={() => setHovered(false)}
-                // onClick={handleClick}
+                    onClick={() => {
+                        focusplanet(planetRef.current.position)
+                        console.log(planetRef.current)
+                    }}
                 >
-                    <Html position={[0, 1.5, 0]} center>
+                    <Html position={[0, 15, 0]} center>
                         <div className='text-white bg-black p-1 rounded text-xs'>
                             {name}
                         </div>
