@@ -9,7 +9,6 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
     const [angle, setAngle] = useState(0);
     const [hovered, setHovered] = useState(false);
 
-    // Load the GLTF model
     const gltf = useLoader(GLTFLoader, modelPath);
 
     // Load the planet texture

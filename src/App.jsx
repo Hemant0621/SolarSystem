@@ -3,12 +3,11 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import Planet from './components/Planet';
 
-// Main SolarSystem component
 const SolarSystem = () => {
-  const [isTimeStopped, setIsTimeStopped] = useState(false); // State to track if time is stopped
+  const [isTimeStopped, setIsTimeStopped] = useState(false);
 
   const toggleTime = () => {
-    setIsTimeStopped(prevState => !prevState); // Toggle the state
+    setIsTimeStopped(prevState => !prevState); 
   };
 
   return (
@@ -27,7 +26,7 @@ const SolarSystem = () => {
           texturePath="/textures/Sun.png"
           name="Sun"
           rotationSpeed={0.005}
-          isTimeStopped={isTimeStopped} // Pass the state to Planet
+          isTimeStopped={isTimeStopped} 
         />
         <Planet
           orbitRadius={83.14}
