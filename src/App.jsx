@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import Planet from './components/Planet';
 
 // Custom component to handle the camera and controls logic
-const CameraControls = () => {
+const CameraControls = ({ focusPosition }) => {
   const { camera, gl } = useThree();
   const controlsRef = useRef();
 
@@ -13,6 +13,13 @@ const CameraControls = () => {
     camera.position.set(0, 100, 500);
     controlsRef.current.target.set(0, 0, 0);
   }, [camera]);
+
+  useFrame(() => {
+    if (focusPosition) {
+      controlsRef.current.target.lerp(focusPosition, 0.1); // Smoothly transition to focus position
+      controlsRef.current.update();
+    }
+  });
 
   return (
     <OrbitControls
@@ -29,13 +36,14 @@ const CameraControls = () => {
 
 const SolarSystem = () => {
   const [isTimeStopped, setIsTimeStopped] = useState(false); // State to track if time is stopped
+  const [focusPosition, setFocusPosition] = useState(null); // State to manage camera focus position
 
   const toggleTime = () => {
     setIsTimeStopped(prevState => !prevState); 
   };
 
   const focusPlanet = (position) => {
-    setFocusPosition(position);
+    setFocusPosition(position); // Update focus position when a planet is clicked
   };
 
   return (
@@ -61,7 +69,7 @@ const SolarSystem = () => {
           name="Mercury"
           rotationSpeed={0.015}
           isTimeStopped={isTimeStopped}
-          focusplanet={focusPlanet}
+          focusplanet={() => focusPlanet(new THREE.Vector3(831.4, 0, 0))} // Update camera focus
         />
         <Planet
           orbitRadius={1550.6}
@@ -71,7 +79,7 @@ const SolarSystem = () => {
           name="Venus"
           rotationSpeed={0.015}
           isTimeStopped={isTimeStopped}
-          focusplanet={focusPlanet}
+          focusplanet={() => focusPlanet(new THREE.Vector3(1550.6, 0, 0))} // Update camera focus
         />
         <Planet
           orbitRadius={2144.6}
@@ -81,7 +89,7 @@ const SolarSystem = () => {
           name="Earth"
           rotationSpeed={0.01}
           isTimeStopped={isTimeStopped}
-          focusplanet={focusPlanet}
+          focusplanet={() => focusPlanet(new THREE.Vector3(2144.6, 0, 0))} // Update camera focus
         />
         <Planet
           orbitRadius={3273.5}
@@ -91,7 +99,7 @@ const SolarSystem = () => {
           name="Mars"
           rotationSpeed={0.02}
           isTimeStopped={isTimeStopped}
-          focusplanet={focusPlanet}
+          focusplanet={() => focusPlanet(new THREE.Vector3(3273.5, 0, 0))} // Update camera focus
         />
         <Planet
           orbitRadius={11160.7}
@@ -101,7 +109,7 @@ const SolarSystem = () => {
           name="Jupiter"
           rotationSpeed={0.005}
           isTimeStopped={isTimeStopped}
-          focusplanet={focusPlanet}
+          focusplanet={() => focusPlanet(new THREE.Vector3(11160.7, 0, 0))} // Update camera focus
         />
 
         {/* Camera and controls component */}
