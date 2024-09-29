@@ -31,6 +31,11 @@ const CameraControls = () => {
 const SolarSystem = () => {
   const [isTimeStopped, setIsTimeStopped] = useState(false); // State to track if time is stopped
   const [focusPosition, setFocusPosition] = useState(null);
+  const [focus , setfocus] = useState('Sun');
+  
+  // useEffect(()=>{
+  //   setfocus('Mercury')
+  // },[focus])
 
   const toggleTime = () => {
     setIsTimeStopped(prevState => !prevState); // Toggle the state
@@ -55,6 +60,7 @@ const SolarSystem = () => {
           rotationSpeed={0.005}
           isTimeStopped={isTimeStopped} // Pass the state to Planet
           focusplanet={focusPlanet}
+          focus
         />
         <Planet
           orbitRadius={831.4}
@@ -65,7 +71,7 @@ const SolarSystem = () => {
           rotationSpeed={0.015}
           isTimeStopped={isTimeStopped}
           focusplanet={focusPlanet}
-          focus={true}
+          focus
         />
         <Planet
           orbitRadius={1550.6}
@@ -76,6 +82,7 @@ const SolarSystem = () => {
           rotationSpeed={0.015}
           isTimeStopped={isTimeStopped}
           focusplanet={focusPlanet}
+          focus
         />
         <Planet
           orbitRadius={2144.6}
@@ -86,6 +93,7 @@ const SolarSystem = () => {
           rotationSpeed={0.01}
           isTimeStopped={isTimeStopped}
           focusplanet={focusPlanet}
+          focus
         />
         <Planet
           orbitRadius={3273.5}
@@ -96,6 +104,7 @@ const SolarSystem = () => {
           rotationSpeed={0.02}
           isTimeStopped={isTimeStopped}
           focusplanet={focusPlanet}
+          focus
         />
         <Planet
           orbitRadius={11160.7}
@@ -106,6 +115,7 @@ const SolarSystem = () => {
           rotationSpeed={0.005}
           isTimeStopped={isTimeStopped}
           focusplanet={focusPlanet}
+          focus
         />
 
         {/* Camera and controls component */}

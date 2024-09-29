@@ -4,18 +4,18 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 import { Html } from '@react-three/drei';
 
-const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpeed, isTimeStopped, focusplanet , focus=false }) => {
+const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpeed, isTimeStopped, focusplanet , focus }) => {
     const planetRef = useRef();
     const [angle, setAngle] = useState(0);
     const [hovered, setHovered] = useState(false);
-
     // Load the GLTF model
     const gltf = useLoader(GLTFLoader, modelPath);
-
+    
     // Load the planet texture
     const planetTexture = useLoader(THREE.TextureLoader, texturePath);
-
+    
     useEffect(() => {
+        console.log(focus)
         if (gltf && gltf.scene) {
             const planetMesh = gltf.scene.children[0];
 
@@ -45,8 +45,9 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
     });
 
     useEffect(()=>{
-        if(focus){
+        if(focus==name){
             focusplanet(planetRef.current.position)
+            console.log(name)
         }
     },[focus])
 
@@ -69,8 +70,8 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
             {planetRef.current && (
                 <primitive
                     object={planetRef.current}
-                    onPointerOver={() => setHovered(true)}
-                    onPointerOut={() => setHovered(false)}
+                    // onPointerOver={() => setHovered(true)}
+                    // onPointerOut={() => setHovered(false)}
                 >
                     <Html position={[0, 1.5, 0]} center>
                         <div className='text-black cursor-pointer p-1 rounded text-xs'>
