@@ -4,9 +4,9 @@ import { OrbitControls } from '@react-three/drei';
 import Planet from './components/Planet';
 
 // Custom component to handle the camera and controls logic
-const controlsRef = useRef();
 const CameraControls = () => {
   const { camera, gl } = useThree();
+  const controlsRef = useRef();
 
   useEffect(() => {
     // Set initial camera position and target to focus on the Sun
@@ -20,25 +20,29 @@ const CameraControls = () => {
       args={[camera, gl.domElement]}
       enablePan={true}          // Enable panning
       enableZoom={true}         // Allow zoom
-      minDistance={0}          // Minimum zoom-in distance
-      maxDistance={1000000}       // Maximum zoom-out distance
+      minDistance={0}           // Minimum zoom-in distance
+      maxDistance={1000000}     // Maximum zoom-out distance
       maxPolarAngle={Math.PI}   // Allow full rotation vertically
     />
-
   );
 };
 
 // Main SolarSystem component
 const SolarSystem = () => {
   const [isTimeStopped, setIsTimeStopped] = useState(false); // State to track if time is stopped
+  const [focusPosition, setFocusPosition] = useState(null);
 
   const toggleTime = () => {
     setIsTimeStopped(prevState => !prevState); // Toggle the state
   };
 
+  const focusPlanet = (position) => {
+    setFocusPosition(position);
+  };
+
   return (
     <>
-      <Canvas camera={{ position: [0, 100, 500], fov: 90,near : 1, far: 1000000 }} style={{ height: "100vh", width: "100vw" }}>
+      <Canvas camera={{ position: [0, 100, 500], fov: 90, near: 1, far: 1000000 }} style={{ height: "100vh", width: "100vw" }}>
         <ambientLight intensity={1} />
         <pointLight position={[25, 25, 25]} intensity={2} />
 
@@ -50,6 +54,7 @@ const SolarSystem = () => {
           name="Sun"
           rotationSpeed={0.005}
           isTimeStopped={isTimeStopped} // Pass the state to Planet
+          focusplanet={focusPlanet}
         />
         <Planet
           orbitRadius={831.4}
@@ -59,7 +64,7 @@ const SolarSystem = () => {
           name="Mercury"
           rotationSpeed={0.015}
           isTimeStopped={isTimeStopped}
-          controlsRef={contr}
+          focusplanet={focusPlanet}
         />
         <Planet
           orbitRadius={1550.6}
@@ -69,6 +74,7 @@ const SolarSystem = () => {
           name="Venus"
           rotationSpeed={0.015}
           isTimeStopped={isTimeStopped}
+          focusplanet={focusPlanet}
         />
         <Planet
           orbitRadius={2144.6}
@@ -78,6 +84,7 @@ const SolarSystem = () => {
           name="Earth"
           rotationSpeed={0.01}
           isTimeStopped={isTimeStopped}
+          focusplanet={focusPlanet}
         />
         <Planet
           orbitRadius={3273.5}
@@ -87,6 +94,7 @@ const SolarSystem = () => {
           name="Mars"
           rotationSpeed={0.02}
           isTimeStopped={isTimeStopped}
+          focusplanet={focusPlanet}
         />
         <Planet
           orbitRadius={11160.7}
@@ -96,10 +104,11 @@ const SolarSystem = () => {
           name="Jupiter"
           rotationSpeed={0.005}
           isTimeStopped={isTimeStopped}
+          focusplanet={focusPlanet}
         />
 
         {/* Camera and controls component */}
-        <CameraControls />
+        <CameraControls focusPosition={focusPosition}/>
       </Canvas>
 
       <button
