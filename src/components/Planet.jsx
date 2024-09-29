@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
 import { Html } from '@react-three/drei';
 
-const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpeed,isTimeStopped }) => {
+const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpeed,isTimeStopped , controlsRef , focus=false}) => {
     const planetRef = useRef();
     const [angle, setAngle] = useState(0);
     const [hovered, setHovered] = useState(false);
@@ -14,6 +14,17 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
 
     // Load the planet texture
     const planetTexture = useLoader(THREE.TextureLoader, texturePath);
+
+    useFrame(() => {
+        if (controlsRef.current && focus) {
+            const mercuryPosition = new THREE.Vector3(
+                orbitRadius * Math.cos(0), // X
+                0, // Y
+                orbitRadius * Math.sin(0) // Z
+            );
+            controlsRef.current.target.copy(mercuryPosition);
+        }
+    });
 
     useEffect(() => {
         if (gltf && gltf.scene) {

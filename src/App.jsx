@@ -4,9 +4,9 @@ import { OrbitControls } from '@react-three/drei';
 import Planet from './components/Planet';
 
 // Custom component to handle the camera and controls logic
+const controlsRef = useRef();
 const CameraControls = () => {
   const { camera, gl } = useThree();
-  const controlsRef = useRef();
 
   useEffect(() => {
     // Set initial camera position and target to focus on the Sun
@@ -59,6 +59,7 @@ const SolarSystem = () => {
           name="Mercury"
           rotationSpeed={0.015}
           isTimeStopped={isTimeStopped}
+          controlsRef={contr}
         />
         <Planet
           orbitRadius={1550.6}
