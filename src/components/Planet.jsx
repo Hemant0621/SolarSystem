@@ -40,16 +40,12 @@ const Planet = ({ orbitRadius, scale, modelPath, texturePath, name, rotationSpee
             planetRef.current.position.x = orbitRadius * Math.cos(angle);
             planetRef.current.position.z = orbitRadius * Math.sin(angle);
             planetRef.current.rotation.y += rotationSpeed; // Rotate around its axis
+            if(focus==name){
+                focusplanet(planetRef.current.position)
+                console.log(name)
+            }
         }
     });
-
-    useEffect(()=>{
-        console.log(focus)
-        if(focus==name){
-            focusplanet(planetRef.current.position)
-            console.log(name)
-        }
-    },[focus])
 
     const points = [];
     const segments = 100; // Number of segments for a smooth circle

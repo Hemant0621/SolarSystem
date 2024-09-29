@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
+import { useLoader, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import Planet from './components/Planet';
+import * as THREE from 'three';
 
 // Custom component to handle the camera and controls logic
 const CameraControls = ({ focusPosition }) => {
@@ -11,16 +13,17 @@ const CameraControls = ({ focusPosition }) => {
   useEffect(() => {
     // Set initial camera position and target to focus on the Sun
     camera.position.set(0, 100, 500);
-    controlsRef.current.target.set(0, 0, 0);
   }, [camera]);
 
-  useEffect(() => {
+  useFrame(() => {
     if (focusPosition) {
-      // Smoothly move the camera to focus on the planet's position
-      camera.position.lerp(new THREE.Vector3(focusPosition.x + 100, focusPosition.y + 50, focusPosition.z + 100), 0.1);
-      controlsRef.current.target.set(focusPosition.x, focusPosition.y, focusPosition.z);
+      // Smoothly move the camera to follow the planet's position in each frame
+      const targetPosition = new THREE.Vector3(focusPosition.x + 10, focusPosition.y + 10, focusPosition.z + 10);
+      camera.position.lerp(targetPosition, 0.1); // Adjust the camera's position
+      controlsRef.current.target.lerp(focusPosition, 0.1); // Adjust the controls' target
+      controlsRef.current.update();
     }
-  }, [focusPosition, camera]);
+  });
 
   return (
     <OrbitControls
@@ -40,11 +43,8 @@ const CameraControls = ({ focusPosition }) => {
 const SolarSystem = () => {
   const [isTimeStopped, setIsTimeStopped] = useState(false); // State to track if time is stopped
   const [focusPosition, setFocusPosition] = useState(null);
-  const [focus , setfocus] = useState('Mercury');
-  
-  // useEffect(()=>{
-  //   setfocus('Mercury')
-  // },[focus])
+  const [focus, setfocus] = useState('Sun');
+
 
   const toggleTime = () => {
     setIsTimeStopped(prevState => !prevState); // Toggle the state
@@ -128,7 +128,7 @@ const SolarSystem = () => {
         />
 
         {/* Camera and controls component */}
-        <CameraControls focusPosition={focusPosition}/>
+        <CameraControls focusPosition={focusPosition} />
       </Canvas>
 
       <button
@@ -145,8 +145,12 @@ const SolarSystem = () => {
       >
         {isTimeStopped ? 'Start Time' : 'Stop Time'}
       </button>
-      <div>
-        <button>mercury</button>
+      <div className=' absolute top-24 flex flex-col left-5 gap-2'>
+        <button onClick={()=>setfocus('Mercury')}>Mercury</button>
+        <button onClick={()=>setfocus('Venus')}>Venus</button>
+        <button onClick={()=>setfocus('Earth')}>Earth</button>
+        <button onClick={()=>setfocus('Mars')}>Mars</button>
+        <button onClick={()=>setfocus('Jupiter')}>Jupiter</button>
       </div>
     </>
   );
